@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <title>PANDA COMBAT - Telegram Mini App</title>
+  <meta name="viewport" content="width=340, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #ffffff;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 14px;
+    }
+    .container { width: 340px; margin: 0 auto; padding: 15px 10px 90px 10px; }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px; padding: 18px; text-align: center; margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .header-title { font-size: 1.1em; font-weight: 700; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    .balance-card {
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+      border-radius: 12px; padding: 14px; margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .balance-title { font-size: 0.9em; font-weight: 600; margin-bottom: 10px; color: #f0f0f0; text-transform: uppercase; letter-spacing: 0.8px; text-align: center; }
+    .balance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .balance-item { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    .balance-label { font-weight: 500; color: #b0b0b0; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .balance-value { font-weight: 700; font-size: 1.1em; color: #4ade80; display: block; }
+    .withdraw-btn {
+      width: 100%; padding: 10px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white; border: none; border-radius: 8px; font-size: 0.9em; font-weight: 600;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 3px 12px rgba(16,185,129,0.3); transition: all 0.3s;
+    }
+    .withdraw-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(16,185,129,0.4); }
+
+    .promo-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .promo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .promo-title { font-size: 0.9em; font-weight: 600; color: #f0f0f0; text-transform: uppercase; letter-spacing: 0.8px; }
+    .create-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s; box-shadow: 0 2px 8px rgba(239,68,68,0.3); }
+    .create-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(239,68,68,0.4); }
+    .promo-input-container { display: flex; gap: 8px; align-items: stretch; }
+    .promo-code-input { flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9em; font-weight: 500; outline: none; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px; }
+    .promo-code-input:focus { border-color: #8b5cf6; background: rgba(255,255,255,0.1); box-shadow: 0 0 0 2px rgba(139,92,246,0.2); }
+    .promo-code-input::placeholder { color: #9ca3af; text-transform: none; letter-spacing: normal; }
+    .promo-code-btn { padding: 10px 18px; border-radius: 8px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border: none; color: white; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(139,92,246,0.3); transition: all 0.3s; font-size: 0.85em; min-width: 70px; }
+    .promo-code-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(139,92,246,0.4); }
+    .promo-code-btn:disabled { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .section-title { font-size: 0.9em; font-weight: 600; margin-bottom: 10px; color: #f0f0f0; text-transform: uppercase; letter-spacing: 0.8px; padding-left: 4px; }
+    .actions-block { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .action-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9em; }
+    .action-item:last-child { border-bottom: none; padding-bottom: 6px; }
+    .action-label { font-weight: 500; font-size: 0.9em; color: #e0e0e0; text-transform: uppercase; letter-spacing: 0.3px; }
+    .action-btn { padding: 6px 14px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; border-radius: 6px; font-size: 0.8em; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 6px rgba(59,130,246,0.3); transition: all 0.3s; }
+    .action-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 10px rgba(59,130,246,0.4); }
+
+    .stats-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-item { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+    .stat-number { font-size: 1.2em; font-weight: 700; color: #fbbf24; margin-bottom: 2px; }
+    .stat-label { font-size: 0.75em; color: #b0b0b0; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .achievements-section { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 12px; padding: 14px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    .achievement-item { display: flex; align-items: center; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.05); }
+    .achievement-item:last-child { margin-bottom: 0; }
+    .achievement-icon { font-size: 1.5em; margin-right: 12px; }
+    .achievement-text { flex: 1; }
+    .achievement-title { font-size: 0.9em; font-weight: 600; color: #f0f0f0; margin-bottom: 2px; }
+    .achievement-desc { font-size: 0.75em; color: #b0b0b0; }
+    .achievement-reward { font-size: 0.8em; font-weight: 600; color: #4ade80; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 340px; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px); border-top: 1px solid rgba(255,255,255,0.1); border-radius: 20px 20px 0 0; padding: 16px 12px; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 8px 8px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); min-width: 50px; flex: 1; margin: 0 2px; }
+    .nav-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .nav-icon { width: 22px; height: 22px; margin-bottom: 4px; background: #fff; mask-size: contain; mask-repeat: no-repeat; mask-position: center; }
+    .nav-home .nav-icon { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m3 12 2-2m0 0 7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011 1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'/%3E%3C/svg%3E"); }
+    .nav-ads .nav-icon { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'/%3E%3C/svg%3E"); }
+    .nav-task .nav-icon { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E"); }
+    .nav-wallet .nav-icon { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'/%3E%3C/svg%3E"); }
+    .nav-label { font-size: 0.7em; font-weight: 500; color: #e0e0e0; text-transform: uppercase; letter-spacing: 0.3px; }
+
+    #snackbar { display: none; position: fixed; top: 18px; left: 50%; transform: translateX(-50%); background: #059669; color: white; padding: 12px 24px; border-radius: 24px; z-index: 2001; font-weight: 600; font-size: 1em; box-shadow: 0 4px 16px rgba(5,150,105,0.4); transition: opacity 0.4s; opacity: 1; letter-spacing: 0.5px; }
+    #snackbar.error { background: #ef4444; box-shadow: 0 4px 16px rgba(239,68,68,0.4); }
+
+    @media (max-width: 360px) { .container { width: 100%; padding: 10px 5px 90px 5px; } .bottom-nav { width: 100%; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header"><div class="header-title" id="telegram-id">Loading User...</div></div>
+
+    <div class="balance-card">
+      <div class="balance-title">Your Balance</div>
+      <div class="balance-grid">
+        <div class="balance-item">
+          <div class="balance-label">DOGS</div>
+          <span class="balance-value" id="dogs-balance">...</span>
+        </div>
+        <div class="balance-item">
+          <div class="balance-label">USDT</div>
+          <span class="balance-value" id="usdt-balance">...</span>
+        </div>
+      </div>
+      <button class="withdraw-btn">🎁 CLAIM UP TO 1K DOGS</button>
+    </div>
+
+    <div class="promo-section">
+      <div class="promo-header">
+        <div class="promo-title">Promo Code</div>
+        <button class="create-btn" onclick="goToGiftCreate()">CREATE GIFT</button>
+      </div>
+      <div class="promo-input-container">
+        <input type="text" id="promo-code-input" class="promo-code-input" placeholder="Enter code" maxlength="20" />
+        <button id="promo-code-btn" class="promo-code-btn" onclick="redeemPromoCode()">CLAIM</button>
+      </div>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="actions-block">
+      <div class="action-item">
+        <span class="action-label">Watch Ads</span>
+        <button class="action-btn" onclick="window.location.href='ads.html'">Go</button>
+      </div>
+      <div class="action-item">
+        <span class="action-label">Daily Tasks</span>
+        <button class="action-btn" onclick="window.location.href='tasks.html'">Go</button>
+      </div>
+      <div class="action-item">
+        <span class="action-label">Invite Friends</span>
+        <button class="action-btn" onclick="window.location.href='invite.html'">Go</button>
+      </div>
+    </div>
+
+    <div class="section-title">Your Stats</div>
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" id="total-earned">0</div>
+          <div class="stat-label">Total Earned</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="ads-watched">0</div>
+          <div class="stat-label">Ads Watched</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="tasks-completed">0</div>
+          <div class="stat-label">Tasks Done</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="daily-streak">0</div>
+          <div class="stat-label">Daily Streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Recent Achievements</div>
+    <div class="achievements-section">
+      <div class="achievement-item">
+        <div class="achievement-icon">🎯</div>
+        <div class="achievement-text">
+          <div class="achievement-title">First Steps</div>
+          <div class="achievement-desc">Welcome to Panda Combat!</div>
+        </div>
+        <div class="achievement-reward">+10 DOGS</div>
+      </div>
+      <div class="achievement-item">
+        <div class="achievement-icon">📱</div>
+        <div class="achievement-text">
+          <div class="achievement-title">Daily Login</div>
+          <div class="achievement-desc">Login for 3 consecutive days</div>
+        </div>
+        <div class="achievement-reward">+50 DOGS</div>
+      </div>
+      <div class="achievement-item">
+        <div class="achievement-icon">🎬</div>
+        <div class="achievement-text">
+          <div class="achievement-title">Ad Viewer</div>
+          <div class="achievement-desc">Watch your first advertisement</div>
+        </div>
+        <div class="achievement-reward">+15 DOGS</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="snackbar"></div>
+
+  <div class="bottom-nav">
+    <div class="nav-item nav-home" onclick="window.location.href='index.html'">
+      <div class="nav-icon"></div><span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item nav-ads" onclick="window.location.href='ads.html'">
+      <div class="nav-icon"></div><span class="nav-label">Ads</span>
+    </div>
+    <div class="nav-item nav-task" onclick="window.location.href='tasks.html'">
+      <div class="nav-icon"></div><span class="nav-label">Tasks</span>
+    </div>
+    <div class="nav-item nav-wallet" onclick="window.location.href='wallet.html'">
+      <div class="nav-icon"></div><span class="nav-label">Wallet</span>
+    </div>
+  </div>
+
+  <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+  <script type="module">
+  // Firebase v9 modular imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getDatabase, ref, get, set, update, runTransaction } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+  // Snackbar utility
+  function showSnackbar(msg, isError = false) {
+    const bar = document.getElementById('snackbar');
+    if (!bar) return;
+    bar.textContent = msg;
+    bar.className = isError ? 'error' : '';
+    bar.style.display = 'block';
+    bar.style.opacity = 1;
+    setTimeout(() => {
+      bar.style.opacity = 0;
+      setTimeout(() => { bar.style.display = 'none'; }, 400);
+    }, isError ? 4000 : 3000);
+  }
+
+  // Navigation shortcuts
+  window.goToGiftCreate = function() { window.location.href = 'create.html#gift'; };
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDznXZYyJDmYmfWhjb3BwHa8bnu48Z0Ra4",
+    authDomain: "panda-combat.firebaseapp.com",
+    databaseURL: "https://panda-combat-default-rtdb.firebaseio.com",
+    projectId: "panda-combat",
+    storageBucket: "panda-combat.firebasestorage.app",
+    messagingSenderId: "257385009837",
+    appId: "1:257385009837:web:12429aa7bd48fe22baac24",
+    measurementId: "G-FJB3CP1S5F"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);       // Create app instance
+  const db  = getDatabase(app);                    // Acquire RTDB handle
+
+  // Telegram Mini App context
+  window.Telegram?.WebApp?.ready?.();
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const userKey = tgUser ? String(tgUser.id) : "UNKNOWN_USER";
+  const headerEl = document.getElementById("telegram-id");
+  if (headerEl) headerEl.textContent = tgUser ? (tgUser.username ? "@" + tgUser.username : "ID: " + tgUser.id) : "UNKNOWN_USER";
+
+  // Helpers
+  const byId = (id) => document.getElementById(id);
+  const today = () => new Date().toISOString().split('T')[0];
+
+  // Atomic totals increment: totalEarn, totalEarnBy[currency], taskDone
+  async function incrementTotals(amount, currency = 'DOGS', doneInc = 1) {
+    const totalEarnRef  = ref(db, `users/${userKey}/totalEarn`);
+    const byCurrRef     = ref(db, `users/${userKey}/totalEarnBy/${currency}`);
+    const taskDoneRef   = ref(db, `users/${userKey}/taskDone`);
+    await Promise.all([
+      runTransaction(totalEarnRef, (cur) => (cur ?? 0) + Number(amount)),
+      runTransaction(byCurrRef,    (cur) => (cur ?? 0) + Number(amount)),
+      runTransaction(taskDoneRef,  (cur) => (cur ?? 0) + Number(doneInc)),
+    ]);
+  }
+
+  // One-time load of user balances and stats
+  async function loadUserData() {
+    try {
+      const userRef = ref(db, 'users/' + userKey);
+      const snap = await get(userRef);
+      let data = {};
+      if (snap.exists()) {
+        data = snap.val() || {};
+      } else {
+        // Initialize default balances on first visit
+        data = { dogs: 10, usdt: 0.00, ton: 0.00, totalEarn: 0, adsWatch: 0, taskDone: 0, DailyStreak: 0 };
+        await set(userRef, data);
+      }
+
+      // Update balances
+      byId('dogs-balance') && (byId('dogs-balance').textContent = String(data.dogs ?? 0));
+      byId('usdt-balance') && (byId('usdt-balance').textContent = String(data.usdt ?? 0));
+
+      // Update stats
+      byId('total-earned')     && (byId('total-earned').textContent     = String(data.totalEarn ?? 0));
+      byId('ads-watched')      && (byId('ads-watched').textContent      = String(data.adsWatch ?? 0));
+      byId('tasks-completed')  && (byId('tasks-completed').textContent  = String(data.taskDone ?? 0));
+      byId('daily-streak')     && (byId('daily-streak').textContent     = String(data.DailyStreak ?? 0));
+    } catch (err) {
+      console.error('loadUserData error:', err);
+      showSnackbar('Failed to load user data', true);
+    }
+  }
+
+  // PROMO CODE redeem flow
+  window.redeemPromoCode = async function() {
+    const input = byId('promo-code-input');
+    const btn   = byId('promo-code-btn');
+    if (!input || !btn) return;
+
+    const promoCode = input.value.trim().toUpperCase();
+    if (!promoCode) { showSnackbar('Please enter a promo code', true); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'CHECKING...';
+
+    try {
+      // 1) Load promo
+      const promoRef = ref(db, 'promoCodes/' + promoCode);
+      const promoSnap = await get(promoRef);
+      if (!promoSnap.exists()) { showSnackbar('Invalid promo code', true); return; }
+      const promo = promoSnap.val() || {};
+
+      // 2) Validate promo flags
+      if (!promo.active) { showSnackbar('Promo code is inactive', true); return; }
+      const usedCount = Number(promo.usedCount || 0);
+      const maxUses   = Number(promo.maxUses ?? 1000);
+      if (usedCount >= maxUses) { showSnackbar('Promo usage limit reached', true); return; }
+      if (promo.expiryDate && new Date() > new Date(promo.expiryDate)) { showSnackbar('Promo code has expired', true); return; }
+
+      // 3) Prevent duplicate user usage
+      const userRef = ref(db, 'users/' + userKey);
+      const userSnap = await get(userRef);
+      const userData = userSnap.val() || {};
+      const usedList = Array.isArray(userData.usedPromoCodes) ? userData.usedPromoCodes : [];
+      if (usedList.includes(promoCode)) { showSnackbar('Promo already used', true); return; }
+
+      // 4) Compute reward
+      const currency = String(promo.rewardCurrency || 'DOGS').toUpperCase();
+      const amount   = Number(promo.rewardAmount || 0);
+
+      // 5) Update balances
+      const newUser = {
+        dogs: Number(userData.dogs || 0),
+        usdt: Number(userData.usdt || 0),
+        ton:  Number(userData.ton  || 0)
+      };
+      if (currency === 'DOGS') newUser.dogs += amount;
+      else if (currency === 'USDT') newUser.usdt += amount;
+      else if (currency === 'TON') newUser.ton += amount;
+
+      const nextUsed = [...usedList, promoCode];
+      await update(userRef, { ...newUser, usedPromoCodes: nextUsed });
+
+      // 6) Atomic totals increment
+      await incrementTotals(amount, currency, 1);
+
+      // 7) Bump promo usage counters
+      await update(promoRef, { usedCount: usedCount + 1, lastUsed: new Date().toISOString() });
+
+      // 8) Refresh UI
+      byId('dogs-balance') && (byId('dogs-balance').textContent = String(newUser.dogs));
+      byId('usdt-balance') && (byId('usdt-balance').textContent = String(newUser.usdt));
+      const totalEarnEl = byId('total-earned');
+      if (totalEarnEl) totalEarnEl.textContent = String(Number(totalEarnEl.textContent || 0) + amount);
+      const tasksDoneEl = byId('tasks-completed');
+      if (tasksDoneEl) tasksDoneEl.textContent = String(Number(tasksDoneEl.textContent || 0) + 1);
+
+      input.value = '';
+      showSnackbar(`🎉 Promo redeemed! +${amount} ${currency}`);
+    } catch (err) {
+      console.error('redeemPromoCode error:', err);
+      showSnackbar('Error processing promo code', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'CLAIM';
+    }
+  };
+
+  // Optional: Example CTA handler
+  document.querySelector('.withdraw-btn')?.addEventListener('click', () => {
+    showSnackbar('Open Tasks to earn more rewards');
+  });
+
+  // Init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadUserData);
+  } else {
+    loadUserData();
+  }
+</script>
+</body>
+</html>
