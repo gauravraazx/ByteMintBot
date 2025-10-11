@@ -96,7 +96,7 @@
 
       <div class="ad-item">
         <div class="ad-title">💎 Premium Video Ad</div>
-        <div class="ad-reward">+ 10 DOGS per ad</div>
+        <div class="ad-reward">+5 to 10 DOGS per ad</div>
 
         <div class="progress-row">
           <div class="progress-label"><span>View progress</span><span id="premium-view-text">0/25</span></div>
@@ -110,7 +110,7 @@
 
       <div class="ad-item">
         <div class="ad-title">🚀 Sponsored Content</div>
-        <div class="ad-reward">+ 10 DOGS per view</div>
+        <div class="ad-reward">+5 to 10 DOGS per view</div>
 
         <div class="progress-row">
           <div class="progress-label"><span>View progress</span><span id="sponsored-view-text">0/25</span></div>
@@ -171,7 +171,7 @@
     document.getElementById("telegram-id").textContent = tgUser?.username ? "@"+tgUser.username : userKey;
 
     // App constants
-    const MAX_ADS_PER_DAY = 25;
+    const MAX_ADS_PER_DAY = 50;
     const AD_KEYS = { 'ad-button-premium':'premium', 'ad-button-sponsored':'sponsored' };
 
     // Only DOGS, no USDT
@@ -261,8 +261,8 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
       await loadAndRender();
-      document.getElementById('ad-button-premium').onclick   = () => handleWatchAd('ad-button-premium', 8);
-      document.getElementById('ad-button-sponsored').onclick = () => handleWatchAd('ad-button-sponsored', 8);
+      document.getElementById('ad-button-premium').onclick   = () => handleWatchAd('ad-button-premium', 5);
+      document.getElementById('ad-button-sponsored').onclick = () => handleWatchAd('ad-button-sponsored', 5);
     });
   </script>
 </body>
