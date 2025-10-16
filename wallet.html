@@ -471,7 +471,7 @@
       <div class="deposit-item" id="memoContainer">
         <div class="deposit-label">Memo (Your User ID):</div>
         <div class="deposit-value-container">
-          <div class="deposit-value" id="userMemo">7206619137</div>
+          <div class="deposit-value" id="userMemo">NOT_TELEGRAM_APP</div>
           <button class="copy-btn" onclick="copyToClipboard('userMemo')">Copy</button>
         </div>
       </div>
@@ -580,9 +580,9 @@
     document.getElementById("userMemo").textContent = String(tgUser.id);
     userKey = String(tgUser.id);
   } else {
-    document.getElementById("id-banner").textContent = "7206619137";
-    document.getElementById("userMemo").textContent = "7206619137";
-    userKey = "7206619137";
+    document.getElementById("id-banner").textContent = "NOT_TELEGRAM_APP";
+    document.getElementById("userMemo").textContent = "NOT_TELEGRAM_APP";
+    userKey = "NOT_TELEGRAM_APP";
   }
   
   // --- Network and Deposit Functions ---
